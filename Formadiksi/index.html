@@ -82,7 +82,7 @@ th{background:var(--bg)}
       <label for="nama">Nama lengkap</label>
       <input id="nama" autocomplete="name" required>
       <label for="nim">NIM</label>
-      <input id="nim" inputmode="numeric" autocomplete="off" required>
+      <input id="nim" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="Contoh: H243600222" required>
       <label for="hp">No HP (WhatsApp)</label>
       <input id="hp" type="tel" inputmode="tel" placeholder="081234567890" required>
       <label for="prodi">Program studi</label>
@@ -176,11 +176,11 @@ $('f').addEventListener('submit', async e => {
   e.preventDefault();
   const err = $('err'); err.className = 'msg';
   const d = {
-    action: 'submit', nama: $('nama').value.trim(), nim: $('nim').value.replace(/\s/g, '').toUpperCase(), hp: $('hp').value.trim(),
+    action: 'submit', nama: $('nama').value.trim(),  nim: $('nim').value.replace(/\s/g, '').toUpperCase(), hp: $('hp').value.trim(),
     prodi: $('prodi').value.trim(), angkatan: $('angkatan').value,
     jenis: (document.querySelector('input[name=jenis]:checked') || {}).value || ''
   };
-  const bad = !d.nama ? 'Nama wajib diisi.' : !/^[A-Z0-9]{8,15}$/.test(d.nim) ? 'NIM hanya boleh huruf dan angka (8 sampai 15 karakter), contoh: H243600222.'
+  const bad = !d.nama ? 'Nama wajib diisi.' :   !/^[A-Z0-9]{8,15}$/.test(d.nim) ? 'NIM hanya boleh huruf dan angka (8 sampai 15 karakter), contoh: H243600222.'
     : !/^(\+?62|0)8\d{8,12}$/.test(d.hp.replace(/[\s-]/g, '')) ? 'Nomor HP tidak valid. Contoh: 081234567890.'
     : !d.prodi ? 'Program studi wajib diisi.' : !d.angkatan ? 'Pilih angkatan.' : !d.jenis ? 'Pilih jenis beasiswa.' : '';
   if (bad) { err.textContent = bad; err.className = 'msg err'; return; }
