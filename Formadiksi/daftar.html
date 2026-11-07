@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pendaftaran Anggota Formadiksi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#10262e;--teal:#0f4c5c;--gold:#f2b705;--bg:#eef3f2;--card:#fff;--line:#d3dedc;--mut:#5b6f73;--err:#b3261e;--ok:#1b7a4b}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh}
+header{background:var(--teal);color:#fff;padding:20px 16px}
+.wrap{max-width:560px;margin:0 auto}
+.wide{max-width:1000px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:52px;width:auto;background:#fff;border-radius:8px;padding:4px}
+.brand h1{font-size:1.15rem;font-weight:800;margin:0 0 0 4px;line-height:1.25}
+.brand p{margin:0 0 0 4px;font-size:.85rem;opacity:.85}
+main{padding:20px 16px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:-6px}
+h2{font-size:1.3rem;margin:0 0 4px;font-weight:800}
+.sub{color:var(--mut);margin:0 0 20px;font-size:.95rem}
+label{display:block;font-weight:700;font-size:.9rem;margin:16px 0 6px}
+input,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,select:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px;border-color:var(--teal)}
+.opts{display:grid;gap:10px}
+.opt{position:relative;margin:0}
+.opt input{position:absolute;opacity:0}
+.opt span{display:block;padding:14px 16px;border:1.5px solid var(--line);border-radius:10px;font-weight:700;cursor:pointer}
+.opt input:checked+span{background:var(--teal);color:#fff;border-color:var(--teal);box-shadow:inset 0 -4px 0 var(--gold)}
+.opt input:focus-visible+span{outline:3px solid var(--gold)}
+.btn{display:inline-block;width:100%;margin-top:24px;padding:14px;border:0;border-radius:10px;background:var(--gold);color:var(--ink);font:inherit;font-weight:800;font-size:1rem;cursor:pointer;text-align:center;text-decoration:none}
+.btn:hover{filter:brightness(.95)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.alt{background:var(--teal);color:#fff;margin-top:12px}
+.btn.sm{width:auto;margin:0;padding:9px 14px;font-size:.9rem}
+.msg{margin-top:14px;padding:11px 13px;border-radius:10px;font-size:.92rem;display:none}
+.msg.err{display:block;background:#fdecea;color:var(--err)}
+.hide{display:none!important}
+.done{text-align:center}
+.done .tick{width:56px;height:56px;border-radius:50%;background:var(--ok);color:#fff;font-size:30px;line-height:56px;margin:0 auto 12px}
+footer{text-align:center;font-size:.8rem;color:var(--mut);padding:0 16px 24px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.bar input,.bar select{width:auto;flex:1;min-width:150px}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.stat{flex:1;min-width:130px;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:.85rem}
+.stat b{display:block;font-size:1.5rem;color:var(--teal)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:720px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--bg)}
+.empty{padding:28px;text-align:center;color:var(--mut)}
+@media(prefers-reduced-motion:no-preference){.done .tick{animation:pop .35s ease-out}@keyframes pop{from{transform:scale(.4);opacity:0}}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap wide brand">
+    <img src="logo-kampus.png" alt="Logo kampus" onerror="this.remove()">
+    <img src="logo-organisasi.png" alt="Logo organisasi" onerror="this.remove()">
+    <div><h1>Pendaftaran Anggota Formadiksi</h1><p id="orgName"></p></div>
+  </div>
+</header>
+
+<main>
+<div class="wrap" id="vForm">
+  <div class="card">
+    <h2>Isi data pendaftaran</h2>
+    <p class="sub">Pilih satu divisi yang paling kamu minati. Satu NIM hanya bisa mendaftar satu kali.</p>
+    <form id="f" novalidate>
+      <label for="nama">Nama lengkap</label>
+      <input id="nama" autocomplete="name" required>
+      <label for="nim">NIM</label>
+      <input id="nim" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="Contoh: H243600222" required>
+      <label for="hp">No HP (WhatsApp)</label>
+      <input id="hp" type="tel" inputmode="tel" placeholder="081234567890" required>
+      <label for="prodi">Program studi</label>
+      <input id="prodi" required>
+      <label for="angkatan">Angkatan</label>
+      <select id="angkatan" required></select>
+      <label id="dl">Pilihan divisi</label>
+      <div class="opts" id="divs" role="radiogroup" aria-labelledby="dl"></div>
+      <div id="err" class="msg" role="alert"></div>
+      <button class="btn" id="go" type="submit">Daftar sekarang</button>
+    </form>
+  </div>
+</div>
+
+<div class="wrap hide" id="vDone">
+  <div class="card done">
+    <div class="tick" aria-hidden="true">✓</div>
+    <h2>Pendaftaran berhasil</h2>
+    <p class="sub">Terima kasih sudah mendaftar. Gabung ke grup untuk info seleksi selanjutnya.</p>
+    <a class="btn alt" id="grp" target="_blank" rel="noopener">Masuk ke grup</a>
+  </div>
+</div>
+
+<div class="wrap wide hide" id="vAdmin">
+  <div class="card" id="aLogin" style="max-width:420px;margin:0 auto">
+    <h2>Login admin</h2>
+    <p class="sub">Khusus pengurus.</p>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password">
+    <div id="aerr" class="msg" role="alert"></div>
+    <button class="btn" id="aGo" type="button">Masuk</button>
+  </div>
+  <div class="card hide" id="aDash">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h2 style="margin:0">Data pendaftar</h2>
+      <button class="btn sm alt" id="out" type="button">Keluar</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="bar">
+      <input id="q" type="search" placeholder="Cari nama, NIM, prodi…" aria-label="Cari">
+      <select id="fd" aria-label="Filter divisi"><option value="">Semua divisi</option></select>
+      <select id="fa" aria-label="Filter angkatan"><option value="">Semua angkatan</option></select>
+      <button class="btn sm" id="csv" type="button">Export CSV</button>
+      <button class="btn sm alt" id="ref" type="button">Muat ulang</button>
+    </div>
+    <div class="tw"><table><thead><tr><th>#</th><th>Waktu</th><th>Nama</th><th>NIM</th><th>No HP</th><th>Prodi</th><th>Angkatan</th><th>Divisi</th></tr></thead><tbody id="tb"></tbody></table></div>
+  </div>
+</div>
+</main>
+<footer>Data dipakai hanya untuk keperluan pendaftaran anggota Formadiksi.</footer>
+
+<script>
+/* ====== PENGATURAN (salin SCRIPT_URL dan ORG_NAME dari index.html) ====== */
+const CFG = {
+  SCRIPT_URL: 'TEMPEL_URL_WEB_APP_DI_SINI',
+  ORG_NAME: 'Formadiksi',
+  GROUP_LINK: 'https://chat.whatsapp.com/ISI_LINK_GRUP'
+};
+const DIVISI = ['Penelitian dan Bidang', 'Sosial Masyarakat', 'Administrasi dan Kesekretariatan', 'Program Studi', 'Komunikasi dan Informasi'];
+/* ======================================================================== */
+const $ = id => document.getElementById(id);
+let ROWS = [];
+
+$('orgName').textContent = CFG.ORG_NAME;
+$('grp').href = CFG.GROUP_LINK;
+const y = new Date().getFullYear();
+$('angkatan').innerHTML = '<option value="">Pilih angkatan</option>' + [y + 1, y, y - 1].map(v => `<option>${v}</option>`).join('');
+$('divs').innerHTML = DIVISI.map(d => `<label class="opt"><input type="radio" name="divisi" value="${d}"><span>${d}</span></label>`).join('');
+$('fd').innerHTML += DIVISI.map(d => `<option>${d}</option>`).join('');
+
+async function api(body) {
+  const r = await fetch(CFG.SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) });
+  return r.json();
+}
+function show(id) { ['vForm', 'vDone', 'vAdmin'].forEach(v => $(v).classList.toggle('hide', v !== id)); }
+function route() { show(location.hash === '#admin' ? 'vAdmin' : 'vForm'); if (location.hash === '#admin') tryResume(); }
+addEventListener('hashchange', route);
+
+$('f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const err = $('err'); err.className = 'msg';
+  const d = {
+    action: 'daftar', nama: $('nama').value.trim(), nim: $('nim').value.replace(/\s/g, '').toUpperCase(), hp: $('hp').value.trim(),
+    prodi: $('prodi').value.trim(), angkatan: $('angkatan').value,
+    divisi: (document.querySelector('input[name=divisi]:checked') || {}).value || ''
+  };
+  const bad = !d.nama ? 'Nama wajib diisi.' : !/^[A-Z0-9]{8,15}$/.test(d.nim) ? 'NIM hanya boleh huruf dan angka (8 sampai 15 karakter), contoh: H243600222.'
+    : !/^(\+?62|0)8\d{8,12}$/.test(d.hp.replace(/[\s-]/g, '')) ? 'Nomor HP tidak valid. Contoh: 081234567890.'
+    : !d.prodi ? 'Program studi wajib diisi.' : !d.angkatan ? 'Pilih angkatan.' : !d.divisi ? 'Pilih divisi.' : '';
+  if (bad) { err.textContent = bad; err.className = 'msg err'; return; }
+  const b = $('go'); b.disabled = true; b.textContent = 'Mengirim…';
+  try {
+    const r = await api(d);
+    if (r.ok) { show('vDone'); scrollTo(0, 0); }
+    else { err.textContent = r.error; err.className = 'msg err'; }
+  } catch (x) { err.textContent = 'Koneksi gagal. Cek internet lalu coba lagi.'; err.className = 'msg err'; }
+  b.disabled = false; b.textContent = 'Daftar sekarang';
+});
+
+async function load(pw) {
+  const r = await api({ action: 'listdaftar', password: pw });
+  if (!r.ok) throw new Error(r.error);
+  ROWS = r.rows;
+  const yrs = [...new Set(ROWS.map(x => x.angkatan))].sort();
+  $('fa').innerHTML = '<option value="">Semua angkatan</option>' + yrs.map(v => `<option>${v}</option>`).join('');
+  $('aLogin').classList.add('hide'); $('aDash').classList.remove('hide');
+  render();
+}
+async function tryResume() {
+  const pw = sessionStorage.getItem('fmd_pw');
+  if (pw && $('aDash').classList.contains('hide')) { try { await load(pw); } catch (e) { sessionStorage.removeItem('fmd_pw'); } }
+}
+$('aGo').addEventListener('click', async () => {
+  const pw = $('pw').value, e = $('aerr'); e.className = 'msg';
+  try { await load(pw); sessionStorage.setItem('fmd_pw', pw); $('pw').value = ''; }
+  catch (x) { e.textContent = x.message || 'Gagal masuk.'; e.className = 'msg err'; }
+});
+$('pw').addEventListener('keydown', e => { if (e.key === 'Enter') $('aGo').click(); });
+$('out').addEventListener('click', () => { sessionStorage.removeItem('fmd_pw'); ROWS = []; $('aDash').classList.add('hide'); $('aLogin').classList.remove('hide'); });
+$('ref').addEventListener('click', async () => { try { await load(sessionStorage.getItem('fmd_pw')); } catch (x) { alert(x.message); } });
+
+function filtered() {
+  const q = $('q').value.toLowerCase(), d = $('fd').value, a = $('fa').value;
+  return ROWS.filter(r => (!d || r.divisi === d) && (!a || r.angkatan === a) &&
+    (!q || [r.nama, r.nim, r.prodi, r.hp].join(' ').toLowerCase().includes(q)));
+}
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function render() {
+  const list = filtered();
+  $('stats').innerHTML = `<div class="stat"><b>${ROWS.length}</b>Total pendaftar</div>` +
+    DIVISI.map(d => `<div class="stat"><b>${ROWS.filter(r => r.divisi === d).length}</b>${d}</div>`).join('');
+  $('tb').innerHTML = list.length ? list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.waktu)}</td><td>${esc(r.nama)}</td><td>${esc(r.nim)}</td><td>${esc(r.hp)}</td><td>${esc(r.prodi)}</td><td>${esc(r.angkatan)}</td><td>${esc(r.divisi)}</td></tr>`).join('')
+    : '<tr><td colspan="8" class="empty">Belum ada data yang cocok.</td></tr>';
+}
+['q', 'fd', 'fa'].forEach(id => $(id).addEventListener('input', render));
+$('csv').addEventListener('click', () => {
+  const cell = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const head = ['Waktu', 'Nama', 'NIM', 'No HP', 'Prodi', 'Angkatan', 'Divisi'];
+  const body = filtered().map(r => [r.waktu, r.nama, '\t' + r.nim, '\t' + r.hp, r.prodi, r.angkatan, r.divisi].map(cell).join(','));
+  const blob = new Blob(['\ufeff' + [head.map(cell).join(','), ...body].join('\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'pendaftar-formadiksi.csv'; a.click();
+});
+route();
+</script>
+</body>
+</html>
